@@ -40,7 +40,8 @@ security:
   runAsUser: 1010
 
 dataSetup:
-  enabled: true
+  # true for SETUP, false for RUNTIME
+  enabled: false
   upgrade: false
 
 env:
@@ -57,6 +58,8 @@ setupCfg:
   basePort: 5000
   license: true
   licenseAcceptEnableSfg: true
+  # true for SETUP, false for RUNTIME
+  dbCreateSchema: false
 
   # Name of system passphrase secret if available
   systemPassphraseSecret: b2b-system-passphrase-secret
@@ -71,7 +74,6 @@ setupCfg:
   dbPort: 50000  
   dbData: B2BIDB
   dbDrivers: db2jcc4.jar
-  dbCreateSchema: true
   dbSecret: b2b-db-secret
 
   # SMTP Attributes

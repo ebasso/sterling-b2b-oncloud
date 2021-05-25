@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: sterling-b2bi-toolkit
-        image: nginx
+        image: ubuntu:18.04
         command: ["/bin/bash", "-ce", "tail -f /dev/null"]
         volumeMounts:
         - mountPath: /var/nfs-data

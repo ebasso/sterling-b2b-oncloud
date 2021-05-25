@@ -55,7 +55,7 @@ oc logs -f db2-0
 1) Connect to the pod.
 
 ```shell
-oc rsh pod / db2-0
+oc rsh pod/db2-0
 ```
 
 2) Creating the database
@@ -301,7 +301,7 @@ oc create -f toolkit-pv-pvc.yaml
 
 ### Deploy Toolkit Container
 
-1. Allocate PV/PVC
+1. Deploy toolkit
 
 ```shell
 oc create -f toolkit-deploy.yaml
@@ -318,34 +318,41 @@ oc get pods
 
 NAME                                     READY   STATUS    RESTARTS   AGE
 sterling-b2bi-toolkit-59..   1/1     Running   0          73m
+
+export  MY_TOOLKIT_POD=sterling-b2bi-toolkit-59..
 ```
 
 2. Connect to Pod and setup directories
 
 ```shell
-oc rsh pod/sterling-b2bi-toolkit-59..
+oc rsh pod/$MY_TOOLKIT_POD
 ```
 
 ```shell
 cd /var/nfs-data/
+
 mkdir resources logs documents
-chmod -R 777 logs
-chmod -R 777 resources
+
+useradd -u 1010 b2biuser
+chown b2biuser:b2biuser logs 
+chown b2biuser:b2biuser resources 
+chown b2biuser:b2biuser documents
+
 exit
 ```
 
 3. Copy files to pod
 
 ```shell
-oc cp db2jcc4.jar sterling-b2bi-toolkit-59..:/var/nfs-data/resources/
-oc cp db2jcc_license_cu.jar sterling-b2bi-toolkit-59..:/var/nfs-data/resources/
-oc cp local_policy.jar sterling-b2bi-toolkit-59..:/var/nfs-data/resources/
+oc cp db2jcc4.jar $MY_TOOLKIT_POD:/var/nfs-data/resources/
+oc cp db2jcc_license_cu.jar $MY_TOOLKIT_POD:/var/nfs-data/resources/
+oc cp local_policy.jar $MY_TOOLKIT_POD:/var/nfs-data/resources/
 ```
 
 4. Validate
 
 ```shell
-oc rsh sterling-b2bi-toolkit-59... ls -l /var/nfs-data/resources/
+oc rsh $MY_TOOLKIT_POD ls -l /var/nfs-data/resources/
 ```
 
 ## Deploy Sterling B2Bi on OpenShift
@@ -447,7 +454,7 @@ oc create -f b2bi-secrets.yaml
 ```shell
 cd ibm-b2bi-prod
 
-helm install sterling-b2bi-app --namespace sterling-b2bi-app --timeout 90m0s -f ../b2bi-override.yaml .
+helm install sterling-b2bi-app --namespace sterling-b2bi-app --timeout 120m0s -f ../b2bi-override.yaml .
 ```
 
 
