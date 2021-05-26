@@ -282,16 +282,16 @@ oc adm policy add-scc-to-user anyuid -z default -n sterling-b2bi-toolkit
 oc get pv -n openshift-image-registry
 
 NAME       CAPACITY ACCESS MOD  RECLAIM POLICY  STATUS  CLAIM                                              STORAGECLASS    
-pvc-42...  20Gi     RWO           Delete          Bound   sterling-b2bi-mq/data-mqsterling-ibm-mq-0                                 
-**pvc-99...**  100Gi    RWX           Delete          Bound   **openshift-image-registry/image-registry-storage**  ibmc-file-gold      
-pvc-ac3... 20Gi     RWO           Delete          Bound   sterling-b2bi-db2/db2vol-db2-0  
+...                               
+pvc-99...  100Gi    RWX           Delete          Bound   openshift-image-registry/image-registry-storage  ibmc-file-gold      
+...
 ```
 4. Get the details of the PV
 
 ```shell
 oc describe pv pvc-99...
 
-:Ref 5
+
 ...
 failure-domain.beta.kubernetes.io/region=us-south
 failure-domain.beta.kubernetes.io/zone=dal10
@@ -302,7 +302,7 @@ Path:   /IBMxxSEVxxxxxxx_xx/data01
 ...
 ```
 
-5. Create file my-toolkit-pv-pvc.yaml, change from `:Ref 5`
+1. Create file my-toolkit-pv-pvc.yaml, change from previous command.
   
 ```
 cp toolkit-pv-pvc.yaml my-toolkit-pv-pvc.yaml
@@ -331,7 +331,7 @@ oc project sterling-b2bi-toolkit
 
 oc get pods
 
-NAME                                     READY   STATUS    RESTARTS   AGE
+NAME                         READY   STATUS    RESTARTS   AGE
 sterling-b2bi-toolkit-59..   1/1     Running   0          73m
 ```
 
