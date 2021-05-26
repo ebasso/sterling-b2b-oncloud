@@ -3,7 +3,7 @@
 Below is a series of How-to, to configure IBM Sterling Solutions on available Public Cloud providers
 
 
-## Solutions and Plataforms
+## Solutions and Clouds
 
 | Article                                  | Cloud Provider  | Sterling B2Bi | DB2       | MQ        |
 |------------------------------------------|-----------------|---------------|-----------|-----------|
