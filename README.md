@@ -25,12 +25,12 @@ Here i will deploy all components:
 
 as containers on OpenShift Cluster.
 
-Go to [openshift-ibmcloud](openshift-ibmcloud).
+Go to [b2bi-db2-mq-openshift-ibmcloud](b2bi-db2-mq-openshift-ibmcloud).
 
 
 # Authors
 
-* **Enio Basso** - *Initial work* - [My Repository](https://github.com/ebasso)
+* **Enio Basso** - [My Repository](https://github.com/ebasso) - [My Site](https://ebasso.net) - [My Wiki](https://ebasso.net/wiki)
 
 
 # License

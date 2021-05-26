@@ -1,0 +1,49 @@
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: sterling-b2bi-app-resources-pv
+  labels:
+    intent: resources
+spec:
+  storageClassName: "ibmc-file-gold"
+  accessModes:
+    - ReadOnlyMany
+  capacity: 
+    storage: 500Mi
+  nfs:
+   server: fsf-dal1003k-fz.adn.networklayer.com
+   path: /IBM02SEV2146666_83/data01/resources/
+
+---
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: sterling-b2bi-app-logs-pv
+  labels:
+    intent: logs
+spec:
+  storageClassName: "ibmc-file-gold"
+  accessModes:
+    - ReadWriteMany
+  capacity: 
+    storage: 1000Mi
+  nfs:
+   server: fsf-dal1003k-fz.adn.networklayer.com
+   path: /IBM02SEV2146666_83/data01/logs/
+
+---
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: sterling-b2bi-app-documents-pv
+  labels:
+    intent: documents
+spec:
+  storageClassName: "ibmc-file-gold"
+  accessModes:
+    - ReadWriteMany
+  capacity: 
+    storage: 1Gi
+  nfs:
+   server: fsf-dal1003k-fz.adn.networklayer.com
+   path: /IBM02SEV2146666_83/data01/documents/
