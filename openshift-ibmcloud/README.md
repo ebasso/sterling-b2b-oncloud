@@ -1,5 +1,16 @@
-# sterling-b2b-oncloud
-Sterling Solutions deploy on Cloud
+# Deploying Sterling B2Bi on Openshift using the IBM Cloud
+
+Steps required to install Sterling B2Bi on OpenShift on the IBM Cloud
+
+Download the following file from Advantage Passport:
+
+* IBM Sterling B2B Integrator Certified Container V6.1 (PartNumber: CC7W7ML) **or**
+* IBM Sterling File Gateway V6.1.0.0 Certified Container (PartNumber: CC7W8ML)
+
+Perform the correct Sizing of your environment, I had problems installing it due to lack of resources. It worked when my works had:
+
+* vCPUs: 8
+* Memory: 32G
 
 ## Create a new project on OpenShift for B2Bi
 
@@ -291,12 +302,16 @@ Path:   /IBMxxSEVxxxxxxx_xx/data01
 ...
 ```
 
-5. Change file toolkit-pv-pvc.yaml
+5. Create file my-toolkit-pv-pvc.yaml, change from `:Ref 5`
+  
+```
+cp toolkit-pv-pvc.yaml my-toolkit-pv-pvc.yaml
+```
 
 6. Allocate PV/PVC
 
 ```shell
-oc create -f toolkit-pv-pvc.yaml
+oc create -f my-toolkit-pv-pvc.yaml
 ```
 
 ### Deploy Toolkit Container
@@ -318,7 +333,11 @@ oc get pods
 
 NAME                                     READY   STATUS    RESTARTS   AGE
 sterling-b2bi-toolkit-59..   1/1     Running   0          73m
+```
 
+Export Toolkit Pod 
+
+```shell
 export  MY_TOOLKIT_POD=sterling-b2bi-toolkit-59..
 ```
 
@@ -426,12 +445,16 @@ Path:   /IBMxxSEVxxxxxxx_xx/data01
 ...
 ```
 
-3. Change file b2bi-pv.yaml
+5. Create file my-b2bi-pv.yaml, change from `:Ref 5`
+  
+```
+cp b2bi-pv.yaml my-b2bi-pv.yaml
+```
 
-4. Allocate PV/PVC
+6. Allocate PV/PVC
 
 ```shell
-oc create -f b2bi-pv.yaml
+oc create -f my-b2bi-pv.yaml
 ```
 
 ### Configuring passphrase for B2Bi, DB secret and MQ secret
@@ -447,14 +470,26 @@ oc create -f b2bi-secrets.yaml
 
 ### Deploy with Helm
 
-1. Change file **b2bi-override.yaml**
+1. Create file my-b2bi-override.yaml, and change 
+
+```
+cp b2bi-override.yaml my-b2bi-override.yaml
+```
 
 2. Deploy with Helm
 
 ```shell
 cd ibm-b2bi-prod
 
-helm install sterling-b2bi-app --namespace sterling-b2bi-app --timeout 120m0s -f ../b2bi-override.yaml .
+helm install sterling-b2bi-app --namespace sterling-b2bi-app --timeout 120m0s -f ../my-b2bi-override.yaml .
 ```
 
+You can check install using this commands:
 
+```shell
+$ oc get pods
+NAME                                    READY   STATUS    RESTARTS   AGE
+sterling-b2bi-app-b2bi-db-setup-bltg5   1/1     Running   0          24s
+
+$ oc logs -f sterling-b2bi-app-b2bi-db-setup-bltg5
+```
