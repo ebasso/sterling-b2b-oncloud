@@ -15,7 +15,7 @@ Below is a series of How-to, to configure IBM Sterling Solutions on available Pu
 
 # Articles
 
-## Deploying Sterling B2Bi, DB2, MQ on OpenShift on IBM Cloud. 
+## Sterling B2Bi, DB2, MQ on OpenShift on IBM Cloud. 
 
 Here i will deploy all components:
 
