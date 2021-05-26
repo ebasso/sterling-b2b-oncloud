@@ -5,11 +5,11 @@ Below is a series of How-to, to configure IBM Sterling Solutions on available Pu
 
 ## Solutions and Clouds
 
-| Article                                  | Cloud Provider  | Sterling B2Bi | DB2       | MQ        |
-|------------------------------------------|-----------------|---------------|-----------|-----------|
-| [openshift-ibmcloud](openshift-ibmcloud) | IBM Cloud       | OpenShift     | OpenShift | OpenShift |
-| -                                        | IBM Cloud       | OpenShift     | PaaS      | Paas      |
-| -                                        | IBM Cloud       | IKS           | PaaS      | Paas      |
+| Article                                                                            | Cloud Provider  | Sterling B2Bi | DB2       | MQ        |
+|------------------------------------------------------------------------------------|-----------------|---------------|-----------|-----------|
+| [Sterling B2Bi, DB2, MQ on OpenShift on IBM Cloud](b2bi-db2-mq-openshift-ibmcloud) | IBM Cloud       | OpenShift     | OpenShift | OpenShift |
+| -                                                                                  | IBM Cloud       | OpenShift     | PaaS      | Paas      |
+| -                                                                                  | IBM Cloud       | IKS           | PaaS      | Paas      |
 
 
 
