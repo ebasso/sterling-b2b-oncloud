@@ -14,7 +14,7 @@ Perform the correct Sizing of your environment, I had problems installing it due
 
 ## Create a new project on OpenShift for B2Bi
 
-1) Create a new project on OpenShift for B2Bi
+1. Create a new project on OpenShift for B2Bi
 
 ```shell
 oc new-project sterling-b2bi-app
@@ -24,26 +24,26 @@ oc new-project sterling-b2bi-app
 
 ### Deploy Container
 
-1) Create a new project on OpenShift for DB2 
+1. Create a new project on OpenShift for DB2 
 
 ```shell
 oc new-project sterling-b2bi-db2
 ```
 
-2) define service and access accounts.
+2. define service and access accounts.
 
 ```shell
 oc create serviceaccount sterling-b2bi-db2-sa
 
 oc adm policy add-scc-to-user privileged -n sterling-b2bi-db2 -z sterling-b2bi-db2-sa
 ```
-3) Perform the deploy
+3. Perform the deploy
 
 ```shell
 oc create -f db2-deploy.yaml
 ```
 
-4) Check for Running status .
+4. Check for Running status .
 
 ```shell
 oc get pods
@@ -63,13 +63,13 @@ oc logs -f db2-0
 
 ### Create Database
 
-1) Connect to the pod.
+1. Connect to the pod.
 
 ```shell
 oc rsh pod/db2-0
 ```
 
-2) Creating the database
+2. Creating the database
 
 ```shell
 su - db2inst1
@@ -104,9 +104,9 @@ exit
 exit
 ```
 
-3)Test db2 connectivity from the outside. 
+3. Test db2 connectivity from the outside. 
 
-Use DbVisualizer to test connectivity from the outside. Identify the LoadBalancer IP address (port 50000). EXTERNAL-IP parameter
+Your can test connectivity from the outside using DBEaver or another SQL Tool. Identify the LoadBalancer IP address (port 50000). EXTERNAL-IP parameter
 
 ```shell
 oc get svc
@@ -115,7 +115,7 @@ oc get svc
   sterling-b2bi-db2-svc-lb  LoadBalancer   172.xx.xx.250   169.xx.xx.83   50000:30707/TCP   43m
 ```
 
-4) Copy JDBC Files from Container
+4. Copy JDBC Files from Container
 
 ```shell
 oc cp db2-0:/opt/ibm/db2/V11.5/java/db2jcc4.jar db2jcc4.jar
@@ -128,19 +128,19 @@ oc cp db2-0:/opt/ibm/db2/V11.5/java/jdk64/jre/lib/security/policy/unlimited/loca
 
 ### Deploy Container
 
-1) Create a new project on OpenShift for MQ
+1. Create a new project on OpenShift for MQ
 
 ```shell
 oc new-project sterling-b2bi-mq
 ```
 
-2) Create Secrets
+2. Create Secrets
 
 ```shell
 oc create -f mq-secret.yaml
 ```
 
-3) Install IBM MQ from the IBM Github repository.
+3. Install IBM MQ from the IBM Github repository.
 
 Clone the IBM MQ charts from the Github repository using the command below.
 
@@ -156,13 +156,13 @@ cd charts/stable/ibm-mqadvanced-server-dev
 cp ../../../mq-override.yaml override.yaml
 ```
 
-4) Install the helm chart with the following command , assuming that the file "override.yaml" is placed in the same folder.
+4. Install the helm chart with the following command , assuming that the file "override.yaml" is placed in the same folder.
 
 ```shell
 helm install sterling-b2bi-mq --namespace sterling-b2bi-mq --timeout 90m0s -f override.yaml .
 ```
 
-5) Test connectivity from the outside. 
+5. Test connectivity from the outside. 
 
 ```shell
 oc get svc
@@ -182,7 +182,7 @@ cd ../../..
 
 ### Setup Registry
 
-1) The following procedure is a one-time setup to activate the internal OpenShift registry route.
+1. The following procedure is a one-time setup to activate the internal OpenShift registry route.
 
 ```shell
 oc project openshift-image-registry
@@ -191,13 +191,13 @@ oc create route reencrypt --service=image-registry
 oc get route image-registry
 ```
 
-2) Now that we have our registry url, let's export a variable
+2. Now that we have our registry url, let's export a variable
 
 ```
 export MY_IMG_REGISTRY=image-registry-openshift-image-registry....us-south.containers.appdomain.cloud
 ```
 
-3) Edit Image Registry Route and insert the following `haproxy.router...` line under annotation key.
+3. Edit Image Registry Route and insert the following `haproxy.router...` line under annotation key.
 
 ```
 oc edit route image-registry
@@ -420,21 +420,20 @@ cd ../../../../..
 
 1. Locate the required information on the default storage volume
 
-```shell
+```
 oc get pv -n openshift-image-registry
 
 NAME       CAPACITY ACCESS MOD  RECLAIM POLICY  STATUS  CLAIM                                              STORAGECLASS    
-pvc-42...  20Gi     RWO           Delete          Bound   sterling-b2bi-mq/data-mqsterling-ibm-mq-0                                 
-**pvc-99...**  100Gi    RWX           Delete          Bound   **openshift-image-registry/image-registry-storage**  ibmc-file-gold      
-pvc-ac3... 20Gi     RWO           Delete          Bound   sterling-b2bi-db2/db2vol-db2-0  
+...                           
+pvc-99...  100Gi    RWX           Delete          Bound   openshift-image-registry/image-registry-storage  ibmc-file-gold      
+...
 ```
 
-2. Get the details of the PV
+1. Get the details of the PV
 
 ```shell
 oc describe pv pvc-99...
 
-:Ref 5
 ...
 failure-domain.beta.kubernetes.io/region=us-south
 failure-domain.beta.kubernetes.io/zone=dal10
@@ -445,7 +444,7 @@ Path:   /IBMxxSEVxxxxxxx_xx/data01
 ...
 ```
 
-5. Create file my-b2bi-pv.yaml, change from `:Ref 5`
+5. Create file my-b2bi-pv.yaml, change from previous command:
   
 ```
 cp b2bi-pv.yaml my-b2bi-pv.yaml
