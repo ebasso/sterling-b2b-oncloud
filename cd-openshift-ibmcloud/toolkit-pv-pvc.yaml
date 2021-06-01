@@ -1,0 +1,27 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+ name: sterling-cd-toolkit-pv
+ labels:
+    failure-domain.beta.kubernetes.io/region: <CHANGE HERE region>
+    failure-domain.beta.kubernetes.io/zone: <CHANGE HERE zone>
+spec:
+ capacity:
+   storage: 20Gi
+ accessModes:
+   - ReadWriteMany
+ nfs:
+  server: fsf-<CHANGE HERE server >-fz.adn.networklayer.com
+  path: /IBMxxSEV<CHANGE_HERE path>/data01
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+ name: sterling-cd-toolkit-pvc
+spec:
+ accessModes:
+   - ReadWriteMany
+ resources:
+   requests:
+     storage: 20Gi
+ storageClassName: ""

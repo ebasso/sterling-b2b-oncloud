@@ -1,0 +1,82 @@
+env:
+  license: "agree"
+  timezone: "UTC"
+
+replicaCount: 1
+
+image:
+  repository: "image-registry.openshift-image-registry.svc:5000/sterling-cd-node1/cdu6.1_certified_container_6.1.0.0"
+  tag: "6.1.0.0_ifix000"
+  pullPolicy: IfNotPresent
+  # Get value  --> "oc describe sa default" and check line 
+  pullSecret: "default-dockercfg-<CHANGE_HERE>"  
+
+extraVolumeMounts: []
+  #- name:
+  #  mountPath: /svshare
+extraVolume: []
+  #- name: pvc-name
+  #  hostPath:
+  #    path: /svshare
+  #    server: IP
+
+cdArgs:
+  nodeName: "CDNODE1"
+  crtName: "cdcert.pem"
+  cport: 1363
+  sport: 1364
+  configDir: "CDFILES"
+
+persistence:
+  enabled: true
+  useDynamicProvisioning: false
+
+pvClaim:
+  name: "sterling-cd-node1-pvc"
+  storageClassName: "ibmc-file-gold"
+  accessMode: ReadWriteOnce
+  size: 100Mi
+
+persistentVolume:
+  name: sterling-cd-node1-pv
+
+
+service:
+  type: "LoadBalancer"
+  apiport: 
+    name: "api"
+    port: "1363"  
+    protocol: "TCP"
+  ftport: 
+    name: "ft"
+    port: "1364"
+    protocol: "TCP"
+  # Add external IP to access application outside the cluster using the IP mentioned below.
+  # It's mandatory field. 
+  externalIP: ""
+
+#Secret configuration for C:D
+secret:
+  secretName: "cd-node1-secret"
+
+#service account to be used
+serviceAccount:
+  create: true
+  name: "sterling-cd-node1-sa"
+
+## Configure resource requests and limits
+## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+##
+resources:
+  limits:
+    cpu: 500m
+    memory: 2000Mi
+  requests:
+    cpu: 500m
+    memory: 2000Mi
+
+dashboard:
+  enabled: true
+
+route:
+  enabled: false

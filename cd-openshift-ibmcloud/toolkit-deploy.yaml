@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sterling-cd-toolkit
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sterling-cd-toolkit
+  template:
+    metadata:
+      labels:
+        app: sterling-cd-toolkit
+    spec:
+      containers:
+      - name: sterling-cd-toolkit
+        image: ubuntu:18.04
+        command: ["/bin/bash", "-ce", "tail -f /dev/null"]
+        volumeMounts:
+        - mountPath: /var/nfs-data
+          name: sterling-cd-toolkit-storage
+      volumes:
+      - name: sterling-cd-toolkit-storage
+        persistentVolumeClaim:
+          claimName: sterling-cd-toolkit-pvc
