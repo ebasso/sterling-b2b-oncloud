@@ -343,7 +343,7 @@ You can check install using this commands:
 ```shell
 $ oc get pods
 NAME                                    READY   STATUS    RESTARTS   AGE
-sterling-cd-node-b2bi-db-setup-bltg5   1/1     Running   0          24s
+sterling-c-1a18-ib-1332-0   1/1     Running   0          24s
 
-$ oc logs -f sterling-b2bi-app-b2bi-db-setup-bltg5
+$ oc logs -f sterling-c-1a18-ib-1332-0
 ```
