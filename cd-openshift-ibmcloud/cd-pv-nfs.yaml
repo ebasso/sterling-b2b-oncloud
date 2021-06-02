@@ -1,16 +1,15 @@
 kind: PersistentVolume
-kind: PersistentVolume
 apiVersion: v1
 metadata:
   name: sterling-cd-node1-pv
   labels:
     app.kubernetes.io/name: sterling-cd-node1-pv
-    app.kubernetes.io/instance: cd-6.1.0
+    app.kubernetes.io/instance: sterling-cd-node1
     app.kubernetes.io/managed-by: Helm
-    helm.sh/chart: ibm-cd-1.1.0
-    release: cd-6.1.0
+    helm.sh/chart: ibm-connect-direct
+    release: sterling-cd-node1
 spec:
-  storageClassName: "ibmc-file-gold"
+  storageClassName: ibmc-file-gold
   capacity:
     storage: 2Gi
   accessModes:
@@ -29,5 +28,5 @@ spec:
  resources:
    requests:
      storage: 2Gi
- storageClassName: ""
+ storageClassName: ibmc-file-gold
     

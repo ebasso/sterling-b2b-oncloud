@@ -18,13 +18,7 @@ git clone https://github.com/ebasso/sterling-b2b-oncloud.git
 cd cd-openshift-ibmcloud
 ```
 
-2. Create a new project on OpenShift for B2Bi
-
-```shell
-oc new-project sterling-cd-node1
-
 ## Create a new project on OpenShift for Connect:Direct
-
 
 1. Login on OpenShift
 
@@ -69,16 +63,8 @@ tar -xzvf IBM_CD_V6.1_UNIX_RHOS.tar.Z
 tar -xvf 6.1.0.0-IBMConnectDirectforUNIX-Certified-Container-Linux-x86-iFix000.tar
  
 ```
-4. Returno do previous directory and extract ibm-connect-direct-x.x.x.tgz
-
-```shell
-cd <CHANGE HERE>/cd-openshift-ibmcloud
-
-tar -xzvf <Downloads_Directory>/ibm-connect-direct-1.1.0.tgz
-```
-
    
-5. Login to Registry. Load/tag/push and check.
+4. Login to Registry. Load/tag/push and check.
 
 ```shell
 docker login -u $(oc whoami) -p $(oc whoami -t) $MY_IMG_REGISTRY
@@ -96,74 +82,25 @@ docker push $MY_IMG_REGISTRY/$MY_CD_PROJECT/cdu6.1_certified_container_6.1.0.0:6
 oc get imagestream 
 ```
 
+6. Returno do previous directory and extract ibm-connect-direct-x.x.x.tgz
+
+```shell
+cd <CHANGE HERE>/cd-openshift-ibmcloud
+
+tar -xzvf <Downloads_Directory>/ibm-connect-direct-1.1.0.tgz
+```
 
 ## Deploy Sterling Toolkit on OpenShift
 
-### Configure Storage for Tookit
+Follow the article [Deploy Sterling Toolkit on OpenShift](../sterling-toolkit/) to setup toolkit
 
-1. Create a new project on OpenShift for Tookit
-
-```shell
-oc new-project sterling-cd-toolkit
-```
-
-2. Define Permissions
-
-```shell
-oc adm policy add-scc-to-user anyuid -z default -n sterling-cd-toolkit
-```
-3. Locate the required information on the default storage volume
-
-```shell
-oc get pv -n openshift-image-registry
-
-NAME       CAPACITY ACCESS MOD  RECLAIM POLICY  STATUS  CLAIM                                              STORAGECLASS    
-...                               
-pvc-99...  100Gi    RWX           Delete          Bound   openshift-image-registry/image-registry-storage  ibmc-file-gold      
-...
-```
-4. Get the details of the PV
-
-```shell
-oc describe pv pvc-99...
-
-
-...
-failure-domain.beta.kubernetes.io/region=us-south
-failure-domain.beta.kubernetes.io/zone=dal10
-...
-Type:   NFS (an NFS mount that lasts the lifetime of a pod)
-Server: fsf-xxxxxxx-xx.adn.networklayer.com
-Path:   /IBMxxSEVxxxxxxx_xx/data01
-...
-```
-
-1. Create file my-toolkit-pv-pvc.yaml, change from previous command.
-  
-```
-cp toolkit-pv-pvc.yaml my-toolkit-pv-pvc.yaml
-```
-
-6. Allocate PV/PVC
-
-```shell
-oc create -f my-toolkit-pv-pvc.yaml
-```
-
-### Deploy Toolkit Container
-
-1. Deploy toolkit
-
-```shell
-oc create -f toolkit-deploy.yaml
-```
 
 ### Copy files to Toolkit Container
 
 1. Get pod information
 
 ```shell
-oc project sterling-cd-toolkit
+oc project sterling-toolkit
 
 oc get pods
 
@@ -174,7 +111,7 @@ sterling-cd-toolkit-59..   1/1     Running   0          73m
 Export Toolkit Pod 
 
 ```shell
-export  MY_TOOLKIT_POD=sterling-cd-toolkit-59..
+export  MY_TOOLKIT_POD=sterling-toolkit-59..
 ```
 
 2. Connect to Pod and setup directories
@@ -183,17 +120,21 @@ export  MY_TOOLKIT_POD=sterling-cd-toolkit-59..
 oc rsh pod/$MY_TOOLKIT_POD
 ```
 
+### Setup toolkit for Sterling Connect:Direct
+
+1. Create directories and set permissions
+
 ```shell
 cd /var/nfs-data/
 
-mkdir -p CDFILES
+mkdir -p connectdirect/CDFILES
 
-chmod -R 777 CDFILES
+chmod -R 777 connectdirect
 
 exit
 ```
 
-3. Create TLS certificates and copy the same to CDFILES folder 
+1. Create TLS certificates and copy the same to CDFILES folder 
 
 Certificate files are required when Secure Plus is being configured. The user must provide the key certificate and trusted certificate files in PEM format.
 
@@ -235,11 +176,9 @@ oc cp cdcert.pem $MY_TOOLKIT_POD:/var/nfs-data/connectdirect/CDFILES
 ```shell
 oc rsh $MY_TOOLKIT_POD ls -l /var/nfs-data/connectdirect/CDFILES
 ```
+# Deploy Sterling Connect:Direct on OpenShift
 
-
-## Deploy Sterling Connect:Direct on OpenShift
-
-### Pre-install
+## Pre-install
 
 1. Define our project 
 
@@ -267,7 +206,7 @@ cd ibm-b2bi-prod/ibm_cloud_pak/pak_extensions/pre-install/namespaceAdministratio
 cd ../../../../..
 ```
 
-### Configure Storage for Connect:Direct
+## Configure Storage for Connect:Direct
 
 1. Locate the required information on the default storage volume
 
@@ -307,7 +246,7 @@ cp cd-pv-nfs.yaml my-cd-pv-nfs.yaml
 oc create -f my-cd-pv-nfs.yaml
 ```
 
-### Configuring passphrase for Connect:Direct
+## Configuring passphrase for Connect:Direct
 
 1. Change file **cd-secrets.yaml**
 
@@ -322,7 +261,7 @@ oc create -f cd-secrets.yaml
 ```
 
 
-### Deploy with Helm
+## Deploy with Helm
 
 1. Create file my-cd-override.yaml, and change 
 
@@ -346,4 +285,12 @@ NAME                                    READY   STATUS    RESTARTS   AGE
 sterling-c-1a18-ib-1332-0   1/1     Running   0          24s
 
 $ oc logs -f sterling-c-1a18-ib-1332-0
+```
+
+
+You can access using this commands:
+
+```shell
+$ oc get svc
+
 ```

@@ -1,0 +1,27 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+ name: sterling-tookit-pv
+ labels:
+    failure-domain.beta.kubernetes.io/region: us-south
+    failure-domain.beta.kubernetes.io/zone: dal10
+spec:
+ capacity:
+   storage: 20Gi
+ accessModes:
+   - ReadWriteMany
+ nfs:
+  server: fsf-dal1003k-fz.adn.networklayer.com
+  path: /IBM02SEV2146666_83/data01
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+ name: sterling-tookit-pvc
+spec:
+ accessModes:
+   - ReadWriteMany
+ resources:
+   requests:
+     storage: 20Gi
+ storageClassName: "ibmc-file-gold"
