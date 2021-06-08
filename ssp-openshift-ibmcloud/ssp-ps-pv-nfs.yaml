@@ -1,0 +1,32 @@
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: sterling-ssp-ps-pv
+  labels:
+    app.kubernetes.io/name: sterling-ssp-ps-pv
+    app.kubernetes.io/instance: ibm-ssp-ps-6.0.2.0
+    app.kubernetes.io/managed-by: Helm
+    helm.sh/chart: im-ssp-ps-6.0.2.0
+    release: ibm-ssp-ps-6.0.2.0
+spec:
+  storageClassName: "ibmc-file-gold"
+  capacity:
+    storage: 2Gi
+  accessModes:
+    - ReadWriteOnce
+  nfs:
+    server: fsf-<CHANGE HERE server >-fz.adn.networklayer.com
+    path: /IBMxxSEV<CHANGE_HERE path>/data01/sspps
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+ name: sterling-ssp-ps-pvc
+spec:
+ accessModes:
+   - ReadWriteMany
+ resources:
+   requests:
+     storage: 2Gi
+ storageClassName: "ibmc-file-gold"
+    

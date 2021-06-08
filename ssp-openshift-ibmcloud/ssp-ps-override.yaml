@@ -1,0 +1,85 @@
+image:
+  repository: "image-registry.openshift-image-registry.svc:5000/sterling-ssp/ssp-ps-docker-image"
+  tag: "6.0.2.0"
+  pullPolicy: IfNotPresent
+  # Get value  --> "oc describe sa default" and check line 
+  pullSecret: "default-dockercfg-7xxmr"  
+
+psArgs:
+  # true - The Perimeter Server will be installed in more-secure zone
+  # false - The Perimeter Server will be installed in less-secure zone
+  networkZoneSecure: false
+  # Secure Network Interface - The perimeter server to use to communicate with the Secure Proxy engine.
+  secureInterface: "*"
+   # External Network Interface - The perimeter server to use to communicate with the backend serve / trading partners.
+  externalInterface: "*"
+  # Remote port number - The Secure Proxy engine will listen on for requests from the perimeter server.
+  # Required for More secure Perimeter Server  
+  remotePort: 30900
+  # Remote HostName/IP address - The Secure Proxy engine host that will be connected to this perimeter server.
+  # Required for More secure Perimeter Server
+  remoteAddress: ""
+  
+  # maxAllocation - Limits the amount of memory used for network buffers.
+  maxAllocation: 768
+  # maxHeapSize - JVM heap size, don't set more than container limit resource memory. 
+  maxHeapSize: 1024 
+  # restricted - set to true to enable restricted network access, controlled by restricted.policy
+  # Required for More secure Perimeter Server 
+  restricted: false
+  # receiveBufferSize - socket receive buffer size for persistent connection
+  receiveBufferSize: 131072
+  # sendBufferSize - socket send buffer size for persistent connection
+  sendBufferSize: 131072
+  # logLevel - May have values of (ERROR,WARN,INFO,COMMTRACE,DEBUG or ALL)
+  logLevel: "ERROR"
+  # rotateLogs - enables log rotation when maxLogSize is reached.
+  rotateLogs: true
+  # maxLogSize - log output will roll over when this many records have been written
+  maxLogSize: 100000
+  # maxnumLogs - after this many logs are written, old logs will be deleted.
+  maxnumLogs: 10  
+
+  
+service:
+  type: "LoadBalancer"
+  externalIP: ""
+  psLessSecure: 
+    # Less Secure Perimeter Server application is accessed by using below mentioned service port, 
+    # so add port as per the requirement else it would be set 30800 as default port.
+    servicePort: 30800
+    # It is not required to change the container port value. 
+    containerPort: 30800
+    
+  # Configure adapter ports. Below are the sample that how add adapter ports.
+  adapters: []
+  
+# Configure Adapter Ports for less secure PS
+  #adapters:
+    #- name: ftp-adapter
+    #  port: 40010
+    #- name: sft-adapter
+    #  port: 40011 
+    #- name: http-adapter
+    #  port: 40012       
+
+
+serviceAccount:
+  # true - Manage by helm chart
+  # false - manage by deployment user. If you are changing from true to false then in this case you need to provide service account name.
+  # recommended to use true value.  
+  create: true
+  name: "sterling-ssp-ps-sa"
+  
+
+resources:
+  limits:
+    cpu: 1000m
+    memory: 1Gi
+  requests:
+    cpu: 1000m
+    memory: 1Gi
+
+
+route:
+  enabled: false

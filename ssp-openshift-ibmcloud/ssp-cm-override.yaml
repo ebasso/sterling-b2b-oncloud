@@ -1,0 +1,121 @@
+image:
+  repository: "image-registry.openshift-image-registry.svc:5000/sterling-ssp/ssp-cm-docker-image"
+  tag: "6.0.2.0"
+  pullPolicy: IfNotPresent
+  # Get value  --> "oc describe sa default" and check line 
+  pullSecret: "default-dockercfg-ldj9w"  
+
+
+cmArgs:
+  appUserUid: 1000
+  appUserGid: 1000
+   # Set the value "true" to Generate Key Certificate, if you are installing Secure Proxy CM first and 
+   # supply the following key certificate details: keyCertFileName, keyCertAliasName, 
+   # keyCertStorePassphrase(secret) and keyCertEncryptPassphrase(secret)
+   # Set the value "false" to Import Key Cert Exported from Secure Proxy Engine if you have installed Secure Proxy Engine first and
+   # supply the following key certificate details: keyCertFileName and keyCertEncryptPassphrase(secret)  
+  keyCertExport: false
+  # Set the certificate file name (The certificate file generates inside the installation directory)
+  keyCertFileName: "defkeyCert.txt"
+  # Set the certificate alias value. 
+  keyCertAliasName: "keycert"
+  # JVM max heap size - don't set more than container limit resource memory. 
+  maxHeapSize: "2048m"
+  
+
+persistentVolume:
+  enabled: true
+  labelName: "app.kubernetes.io/name"
+  labelValue: "ibm-ssp-cm-pv"
+  useDynamicProvisioning: false
+  storageClassName: "ibmc-file-gold"
+  size: 2Gi
+  accessMode: "ReadWriteOnce"
+  
+
+service:
+  type: "LoadBalancer"
+  externalIP: ""
+  jetty: 
+    servicePort: 8443
+    containerPort: 8443
+  cm: 
+    servicePort: 62366
+    containerPort: 62366
+  
+
+secret:
+  secretName: "ssp-cm-secrets"
+
+serviceAccount:
+  # true - Manage by helm chart
+  # false - manage by deployment user. If you are changing from true to false then in this case you need to provide service account name.
+  # recommended to use true value.  
+  create: true
+  name: "sterling-ssp-cm-sa"
+
+
+resources:
+  limits:
+    cpu: 1000m
+    memory: 2Gi
+  requests:
+    cpu: 1000m
+    memory: 2Gi
+
+route:
+  enabled: false
+  
+# The following files can be customized using key value pair in the list format.
+# conf/log4j.properties, bin/log.properties, bin/security.properties, bin/vendor.properties 
+# Add/Update: Key and Value both must be provided in the below format.
+# <File Name Without Extension>_<Property Name>=<Property Value>
+customProperties: []
+# below is the example: 
+#customProperties:
+#  - log4j_log4j.logger.org.apache.commons.beanutils=OFF
+#  - log_audit.log.maxfilesize=10MB
+
+
+# Add/Update VM arguments in the list format
+# <Key as Java property name>=<value>
+vmArguments: []
+# below is the example: 
+#vmArguments:
+#  - Dssp.cm.jetty.sni.enable=false
+#  - DvalidateThruXSD=false
+#  - DsspcmDisableClientEndpointIdentification=true
+
+
+# Use custom common certificate. It updates the engine, CM, and web server certificate. 
+# Exports the common certificate configuration into the PV mapped directory.
+# Exported certificate(commonKeyCertFile) can be imported into the Engine.
+# set the value "true" to update the custom certificate.
+# set the value "false" to not update the custom certificate.  
+customCertificate:
+  customCertEnabled: false
+  # set key store certificate file name
+  commonCertFile: ""
+  # set alias name
+  commonCertAlias: ""
+  # set export key certificate file name and it can be imported into the Engine.
+  commonKeyCertFile: ""
+# below is the example: 
+#customCertificate:
+#  customCertEnabled: true
+#  commonCertFile: "commonKeyStore.p12"
+#  commonCertAlias: "commonCert"
+#  commonKeyCertFile: "commonDefKeyCert.txt"
+
+
+# The custom directories/files can be mapped using the list format.
+# For mapping, We need to provide full path of the file or directory. 
+# First we need to create the directory with 'CM_RESOURCES' name if it is not available into PV. 
+# and keep the custom directories/files into created directory. 
+customFiles: []
+# In the below example we need to keep log4j2.xml file inside 'CM_RESOURCES' directory.
+# so that the container will copy this file into respective directory.   
+#customFiles:
+#  - /conf/log4j2.xml
+
+

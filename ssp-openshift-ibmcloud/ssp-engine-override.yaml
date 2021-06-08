@@ -1,0 +1,139 @@
+image:
+  repository: "image-registry.openshift-image-registry.svc:5000/sterling-ssp/ssp-engine-docker-image"
+  tag: "6.0.2.0"
+  pullPolicy: IfNotPresent
+  # Get value  --> "oc describe sa default" and check line 
+  pullSecret: "default-dockercfg-ldj9w"  
+
+
+engineArgs:
+  appUserUid: 1000
+  appUserGid: 1000  
+   # Set the value "true" to Generate Key Certificate, if you are installing Secure Proxy Engine before CM and supply the following
+   # key certificate details: keyCertFileName, keyCertAliasName, keyCertStorePassphrase(secret) and keyCertEncryptPassphrase(secret)
+   # Set the value "false" to Import Key Cert Exported from Secure Proxy CM if you have installed Secure Proxy CM first and
+   # supply the following key certificate details: keyCertFileName, keyCertAliasName and keyCertEncryptPassphrase(secret)  
+  keyCertExport: true
+  # Key certificate file name 
+  keyCertFileName: "defkeyCert.txt"
+  # Certificate alias value. 
+  keyCertAliasName: "keycert"
+  # JVM max heap size - don't set more than container limit resource memory. 
+  maxHeapSize: "2048m"
+  # Change SSP brand name if required else keep it as it is.
+  signOnDirName: "Signon"
+
+  
+persistentVolume:
+  enabled: true
+  labelName: "app.kubernetes.io/name"
+  labelValue: "sterling-ssp-engine-pv"
+  useDynamicProvisioning: false
+  storageClassName: "ibmc-file-gold"
+  size: 2Gi
+  accessMode: "ReadWriteOnce"
+  
+
+service:
+  type: "LoadBalancer"
+  externalIP: ""
+  engine: 
+    servicePort: 63366
+    containerPort: 63366
+  psMoreSecure: 
+    # More Secure Perimeter Server application is accessed by using below mentioned service port, so add the port number as per the requirement.
+    # The below mentioned service port must be used as remote port while configuring more secure perimeter server.   
+    servicePort:  
+    
+  # Configure adapter ports if we are not using Less Secure Perimeter Server. Below are the sample that how add adapter ports.
+  adapters: []
+  
+# Configure adapter Ports
+#  adapters:
+#    #- name: ftp-adapter
+#    #  port: 40010
+#    - name: sftp-adapter
+#      port: 40011 
+#    - name: http-adapter
+#      port: 40012       
+
+secret:
+  # create secret and set the secret name below 
+  secretName: "ssp-engine-secrets"
+
+
+serviceAccount:
+  # true - Manage by helm chart
+  # false - manage by deployment user. If you are changing from true to false then in this case you need to provide service account name.
+  # recommended to use true value.  
+  create: true
+  name: "sterling-ssp-engine-sa"
+
+resources:
+  limits:
+    cpu: 1000m
+    memory: 3Gi
+  requests:
+    cpu: 1000m
+    memory: 3Gi
+
+
+route:
+  enabled: false
+
+  
+# The following files can be customized using key value pair in the list format.
+# bin/log.properties, bin/security.properties, bin/perimeter.properties, bin/cdsp.properties, bin/portal/mediatypes.properties 
+# bin/portal/pages.properties, conf/log4j.properties
+# Add/Update: Key and Value both must be provided in the below format.
+# <File Name Without Extension>_<Property Name>=<Property Value>
+customProperties: []
+# below is the example: 
+#customProperties:
+#  - log_audit.log.maxfilesize=10MB
+#  - perimeter_conduitStreamPair.bufferSize=500K
+
+
+# Add/Update VM arguments in the list format
+# <Key as Java property name>=<value>
+vmArguments: []
+# below is the example: 
+#vmArguments:
+#  - Djavax.net.debug=ssl,handshake,data,trustmanager
+#  - Xdump:java+heap:events=user
+
+
+# Use to import custom certificate which was exported from the CM.
+# set the value "true" to import the custom certificate.
+# set the value "false" to not import the custom certificate.  
+customCertificate:
+  customCertEnabled: false
+  # set alias name
+  commonCertAlias: ""
+  # set key certificate file name which was exported from the CM.
+  commonKeyCertFile: ""
+# below is the example: 
+#customCertificate:
+#  customCertEnabled: true
+#  commonCertAlias: "commonCert"
+#  commonKeyCertFile: "commonDefKeyCert.txt"
+
+
+# The custom directories/files can be mapped using the list format.
+# For mapping, We need to provide full path of the file or directory. 
+# First we need to create the directory with 'ENG_RESOURCES' name if it is not available into PV. 
+# and keep the custom directories/files into created directory. 
+customFiles: []
+# In the below example we need to keep aspera.conf, log4j2.xml, ncipher_gen2.cfg.jsse and lunasa_6_0.cfg.jsse files and
+# Signon directory inside 'ENG_RESOURCES' directory.
+# so that the container will copy these files into respective directory.   
+#customFiles:
+#  - /bin/aspera.conf
+#  - /conf/log4j2.xml
+#  - /conf/lunasa_6_0.cfg.jsse
+#  - /conf/ncipher_gen2.cfg.jsse
+#  - /Signon 
+
+  
+
+

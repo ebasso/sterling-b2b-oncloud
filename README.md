@@ -23,7 +23,7 @@ Below is a series of How-to, to configure IBM Sterling Solutions on available Pu
 
 | Article                                                                            | Cloud Provider  | Connect:Direct | 
 |------------------------------------------------------------------------------------|-----------------|----------------|
-| DRAFT [Sterling Sterling Secure Proxy on OpenShift on IBM Cloud](ssp-openshift-ibmcloud)         | IBM Cloud       | OpenShift      |
+| [Sterling Sterling Secure Proxy on OpenShift on IBM Cloud](ssp-openshift-ibmcloud) | IBM Cloud       | OpenShift      |
 
 
 
