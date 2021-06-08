@@ -1,11 +1,11 @@
 # Deploying Sterling Manage File Transfer Solutions on Cloud's
 
-Below is a series of How-to, to configure IBM Sterling Solutions on available Public Cloud providers
+A serie of How-to's, to configure IBM Sterling Solutions on available Public Cloud providers
 
 
 ## Solutions and Clouds
 
-### Sterling B2Bi
+### Sterling B2B Integrator
 
 | Article                                                                            | Cloud Provider  | Sterling B2Bi | DB2       | MQ        |
 |------------------------------------------------------------------------------------|-----------------|---------------|-----------|-----------|
