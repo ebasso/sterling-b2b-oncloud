@@ -34,8 +34,9 @@ oc new-project sterling-cd-node1
 
 ## Setup Container Images on Registry
 
+[Setup RH OpenShift Image Registry](../third-party/setup-roks-image-registry.md)
 
-### Upload images to Registry
+## Upload images to Registry
 
 1. Get and export variable
 
@@ -141,25 +142,17 @@ Certificate files are required when Secure Plus is being configured. The user mu
 
 
 ```shell
-openssl req -x509 -sha256 -days 3650 -newkey rsa:2048 -new -nodes -keyout cdkey.pem -out cdcert.crt
+openssl req -x509 -sha256 -days 3650 -newkey rsa:2048 -new -nodes -keyout sspkey.pem -out sspcert.crt -subj '/C=US/ST=California/L=/O=Company/OU=IT/CN=cdnode1.company.com/emailAddress=cdadmin@company.com'
 ```
 provided
 
 ```
 Generating a 2048 bit RSA private key
-................................+++
+........................+++
+...............................................+++
 writing new private key to 'cdkey.pem'
-...
-For some fields there will be a default value,
-If you enter '.', the field will be left blank.
 -----
-Country Name (2 letter code) []:US
-State or Province Name (full name) []:California
-Locality Name (eg, city) []:
-Organization Name (eg, company) []:Company
-Organizational Unit Name (eg, section) []:IT
-Common Name (eg, fully qualified host name) []:cdnode1.company.com
-Email Address []:cdadmin@company.com
+No value provided for Subject Attribute L, skipped
 ```
 
 

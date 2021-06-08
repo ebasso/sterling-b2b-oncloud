@@ -6,14 +6,14 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      app: sterling-tookit
+      app: sterling-toolkit
   template:
     metadata:
       labels:
-        app: sterling-tookit
+        app: sterling-toolkit
     spec:
       containers:
-      - name: sterling-tookit
+      - name: sterling-toolkit
         image: ubuntu:18.04
         command: ["/bin/bash", "-ce", "tail -f /dev/null"]
         volumeMounts:
@@ -22,4 +22,4 @@ spec:
       volumes:
       - name: sterling-toolkit-storage
         persistentVolumeClaim:
-          claimName: sterling-tookit-pvc
+          claimName: sterling-toolkit-pvc

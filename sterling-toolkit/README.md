@@ -140,25 +140,17 @@ Certificate files are required when Secure Plus is being configured. The user mu
 
 
 ```shell
-openssl req -x509 -sha256 -days 3650 -newkey rsa:2048 -new -nodes -keyout cdkey.pem -out cdcert.crt
+openssl req -x509 -sha256 -days 3650 -newkey rsa:2048 -new -nodes -keyout sspkey.pem -out sspcert.crt -subj '/C=US/ST=California/L=/O=Company/OU=IT/CN=cdnode1.company.com/emailAddress=cdadmin@company.com'
 ```
 provided
 
 ```
 Generating a 2048 bit RSA private key
-................................+++
+........................+++
+...............................................+++
 writing new private key to 'cdkey.pem'
-...
-For some fields there will be a default value,
-If you enter '.', the field will be left blank.
 -----
-Country Name (2 letter code) []:US
-State or Province Name (full name) []:California
-Locality Name (eg, city) []:
-Organization Name (eg, company) []:Company
-Organizational Unit Name (eg, section) []:IT
-Common Name (eg, fully qualified host name) []:cdnode1.company.com
-Email Address []:cdadmin@company.com
+No value provided for Subject Attribute L, skipped
 ```
 
 
@@ -183,7 +175,9 @@ oc rsh $MY_TOOLKIT_POD ls -l /var/nfs-data/connectdirect/CDFILES
 ```shell
 cd /var/nfs-data/
 
-mkdir sspcm
+mkdir -p sspcm/CM_RESOURCES
+
+chmod -R a+rwx sspcm
 
 chown -R 1000:1000 sspcm 
 
@@ -199,7 +193,9 @@ exit
 ```shell
 cd /var/nfs-data/
 
-mkdir sspengine
+mkdir -p sspengine/ENG_RESOURCES
+
+chmod -R a+rwx sspengine
 
 chown -R 1000:1000 sspengine
 
@@ -215,6 +211,8 @@ exit
 cd /var/nfs-data/
 
 mkdir sspps
+
+chmod -R a+rwx sspps
 
 chown -R 1000:1000 sspps
 

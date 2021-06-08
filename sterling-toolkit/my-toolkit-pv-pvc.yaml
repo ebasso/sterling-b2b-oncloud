@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: PersistentVolume
 metadata:
- name: sterling-tookit-pv
+ name: sterling-toolkit-pv
  labels:
     failure-domain.beta.kubernetes.io/region: us-south
     failure-domain.beta.kubernetes.io/zone: dal10
@@ -11,13 +11,13 @@ spec:
  accessModes:
    - ReadWriteMany
  nfs:
-  server: fsf-dal1003k-fz.adn.networklayer.com
-  path: /IBM02SEV2146666_83/data01
+  server: fsf-dal1003l-fz.adn.networklayer.com
+  path: /IBM02SEV2146666_86/data01
 ---
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
- name: sterling-tookit-pvc
+ name: sterling-toolkit-pvc
 spec:
  accessModes:
    - ReadWriteMany
