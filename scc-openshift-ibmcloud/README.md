@@ -260,5 +260,5 @@ $ oc logs -f sccXXXXX
 ```shell
 $ oc get svc
 NAME            TYPE           CLUSTER-IP      EXTERNAL-IP     PORT(S)           AGE
-sccXXXXX       LoadBalancer   172.21.81.131   52.xxx.xxx.16   63366:31012/TCP   5m46s
+sccXXXXX       LoadBalancer   172.xx.xx.132   52.xxx.xxx.16   ..../TCP   5m46s
 ```
