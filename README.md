@@ -19,11 +19,11 @@ Below is a series of How-to, to configure IBM Sterling Solutions on available Pu
 | [Sterling Connect:Direct on OpenShift on IBM Cloud](cd-openshift-ibmcloud)         | IBM Cloud       | OpenShift      |
 
 
-### Sterling Sterling Secure Proxy
+### Sterling Secure Proxy
 
 | Article                                                                            | Cloud Provider  | Connect:Direct | 
 |------------------------------------------------------------------------------------|-----------------|----------------|
-| [Sterling Sterling Secure Proxy on OpenShift on IBM Cloud](ssp-openshift-ibmcloud) | IBM Cloud       | OpenShift      |
+| [Sterling Secure Proxy on OpenShift on IBM Cloud](ssp-openshift-ibmcloud)          | IBM Cloud       | OpenShift      |
 
 
 
