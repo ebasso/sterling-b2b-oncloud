@@ -124,7 +124,9 @@ Follow the article [Deploy Secure Proxy Configuration Manager on OpenShift](READ
 
 ## Checking
 
+```shell
 $ oc get svc
 NAME                        TYPE           CLUSTER-IP       EXTERNAL-IP     PORT(S)                          AGE
 ssp-cm-ibm-ssp-cm           LoadBalancer   172.xx.xxx.204   52.xxx.xxx.12   8443:32103/TCP,62366:30939/TCP   5m32s
 ssp-engine-ibm-ssp-engine   LoadBalancer   172.xx.xx.244    52.xxx.xxx.11   63366:31072/TCP                  22m
+```
