@@ -1,0 +1,32 @@
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: ibm-scc-pv
+  labels:
+    app.kubernetes.io/name: ibm-scc-pv
+    app.kubernetes.io/instance: ibm-scc-6.2.0.0
+    app.kubernetes.io/managed-by: Helm
+    helm.sh/chart: ibm-scc-6.2.0.0
+    release: ibm-scc-6.2.0.0
+spec:
+  storageClassName: "ibmc-file-gold"
+  capacity:
+    storage: 2Gi
+  accessModes:
+    - ReadWriteOnce
+  nfs:
+    server: fsf-<CHANGE HERE server >-fz.adn.networklayer.com
+    path: /IBMxxSEV<CHANGE_HERE path>/data01/scc
+#---
+#kind: PersistentVolumeClaim
+#apiVersion: v1
+#metadata:
+# name: ibm-seas-pvc
+#spec:
+# accessModes:
+#   - ReadWriteMany
+# resources:
+#   requests:
+#     storage: 2Gi
+# storageClassName: "ibmc-file-gold"
+    

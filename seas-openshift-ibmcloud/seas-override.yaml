@@ -1,0 +1,63 @@
+image:
+  repository: "image-registry.openshift-image-registry.svc:5000/sterling-seas/seas-docker-image"
+  tag: "6.0.2.0"
+  pullPolicy: IfNotPresent
+  # Get value  --> "oc describe sa default" and check line 
+  pullSecret: "default-dockercfg-ldj9w"  
+
+seasArgs:
+  appUserUid: 1000
+  appUserGid: 1000
+  maxHeapSize: "1024m"
+
+persistentVolume:
+  enabled: true
+  labelName: "app.kubernetes.io/name"
+  labelValue: "ibm-seas-pv"
+  # useDynamicProvisioning is whether or not to use Storage Classes to dynamically create Persistent Volumes 
+  useDynamicProvisioning: false
+  storageClassName: "ibmc-file-gold"
+  # storageClassName: "manual"
+  size: 2Gi
+  accessMode: "ReadWriteOnce"
+  
+# Service
+service:
+  type: "LoadBalancer"
+  externalIP: ""
+  nonSecure:
+    # Non Secure application is accessed by using below mentioned service port, so add port as per the requirement else it would be set 61365 as default port.
+    servicePort: 61365
+    # If traditional Non Secure port is different from 61365 while migrating from traditional to container environment then in this case 
+    # we need to change container port as traditional Non Secure port value else It is not required to change the container port value.
+    containerPort: 61365
+  secure:
+    # Secure application is accessed by using below mentioned service port, so add port as per the requirement else it would be set 61366 as default port.
+    servicePort: 61366
+    # If traditional secure port is different from 61366 while migrating from traditional to container environment then in this case 
+    # we need to change container port as traditional secure port value else It is not required to change the container port value.
+    containerPort: 61366
+  jetty:
+    # Jetty(EA_GUI.jnlp) application is accessed by using below mentioned service port, so add port as per the requirement 
+    # else it would be set 9080 as default port.
+    servicePort: 9080
+    # If traditional jetty port is different from 9080 while migrating from traditional to container environment then in this case 
+    # we need to change container port as traditional jetty port value else It is not required to change the container port value.
+    containerPort: 9080
+
+
+# Secret 
+secret:
+  # create secret and set the secret name below 
+  secretName: seas-secrets
+
+  
+# Use existing service account or manage by helm chart.
+serviceAccount:
+  create: true
+  name: "sterling-seas-sa"
+  
+  
+route:
+  enabled: false
+  

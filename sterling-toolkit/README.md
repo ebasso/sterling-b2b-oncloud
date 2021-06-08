@@ -219,4 +219,34 @@ chown -R 1000:1000 sspps
 exit
 ```
 
+## Setup toolkit for SEAS
+
+1. Create directories 
+
+```shell
+cd /var/nfs-data/
+
+mkdir seas
+
+chmod -R a+rwx seas
+
+exit
+```
+
+## Setup toolkit for IBM Control Center
+
+1. Create directories and user with id 1001
+
+```shell
+cd /var/nfs-data/
+
+mkdir scc
+
+chmod -R a+rwx scc
+
+chown -R 1001:1001 scc
+
+exit
+```
+
 Return to Sterling Solutions

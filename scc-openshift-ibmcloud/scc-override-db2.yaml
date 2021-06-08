@@ -1,0 +1,121 @@
+env:
+  license: "accept"
+
+replicaCount: 1 
+
+image:
+  repository: "image-registry.openshift-image-registry.svc:5000/sterling-scc/ibmscc"
+  tag: "6.2.0.0"
+  pullPolicy: IfNotPresent
+  # Get value  --> "oc describe sa default" and check line 
+  pullSecret: "default-dockercfg-ldj9w"  
+
+serviceAccount:
+  create: true
+  name: sterling-scc-sa
+
+#persistence Volume
+persistentVolume:
+  enabled: true
+  name: "ibm-scc-pv"
+  storageClassName: "manual"
+  size: 2Gi
+  useDynamicProvisioning: false
+  accessMode: "ReadWriteMany"
+
+service:
+  type: LoadBalancer
+  swingConsole:
+    name: "swing-console"
+    port: 58080
+    protocol: "TCP"
+  webConsole:
+    name: "web-console"
+    port: 58082
+    protocol: "TCP"
+  swingConsoleSecure:
+    name: "swing-console-secure"
+    port: 58081
+    protocol: "TCP"
+  webConsoleSecure:
+    name: "web-console-secure"
+    port: 58083
+    protocol: "TCP"
+  externalIP: "" 
+
+ccArgs:
+  appUserUID: "1001"
+  appUserGID: "1001"
+  ccInterval: "2h"
+  nprocLimit: "1048576"
+  nofileLimit: "1048576"
+
+  #Control center database information
+  productEntitilement: "CCM"
+  dbType: "DB2"
+  dbHost:  <ExternalIP DB2>
+  dbPort: "50000"
+  dbUser: "db2inst1"
+  dbName: "ICCM"
+  dbLoc: "none"
+  dbInit: "true"
+  dbPartition: "false"
+  dbDrivers: "/app/CC/user_inputs/db2jcc4.jar"
+
+ 
+  weblistenAddress: 
+  webHost: 
+  autoStopJavaWebAppServer: "true"
+  eventRepositoryAuth: "false"
+  
+  #Email related details
+  emailHostname: "mail.company.com"
+  emailPort: "25"
+  emailUser: ""
+  emailRespond: "noone@company.com"
+  ccAdminEmailAddress: "ccadmin@company.com"
+  
+  #oracleRacOrScan: 
+  
+  #JMS related details
+  jmsEnable: 
+  jmsType: 
+  jmsHost: 
+  jmsPort: 
+  jmsQueueManager: 
+  jmsChannel: 
+  jmsSubject: 
+  jmsTopic: 
+  jmsEmbedBroker: 
+  jmsDataDirectory: 
+  jmsTimeToLive: 
+  jmsRetries: 
+  jmsRetryWait: 
+  jmsBrokerName: 
+  
+  #Secure parameters
+  #dbSSL: 
+    
+  # Keystore and truststore configuration
+  keyStore: "/app/CC/user_inputs/CCenter.keystore"
+  trustStore: "/app/CC/user_inputs/CCenter.truststore"
+  keyAlias: "ccalias120"
+  adminEmailAddress: "ccadmin@company.com"
+
+  #Seas Parameters
+  packagePath: "../packages"
+  seasPrimaryAddress: 
+  seasPrimaryPort: "61365"
+  seasAlternativeAddress:
+  seasAlternativePort:
+  seasSecureConnection: "N"
+  seasProfileName: "test"
+  seasPersistentConnection: "N"
+  seasSecureProtocol:
+
+
+secret:
+  secretName: "ssc-secrets" 
+
+route:
+  enabled: false

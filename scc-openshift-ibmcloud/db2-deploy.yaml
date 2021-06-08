@@ -1,0 +1,59 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: sterling-scc-db2-svc-lb
+spec:
+  selector:
+    app: db2
+  type: LoadBalancer
+  ports:
+  - protocol: TCP
+    port: 50000
+    targetPort: 50000
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: db2
+spec:
+  selector:
+    matchLabels:
+      app: db2
+  serviceName: sterling-scc-db2-svc-lb
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: db2
+    spec:
+      serviceAccount: sterling-scc-db2-sa
+      containers:
+      - name: db2
+        securityContext:
+          privileged: true
+        image: ibmcom/db2
+        env:
+        - name: LICENSE 
+          value: accept 
+        - name: DB2INSTANCE 
+          value: db2inst1 
+        - name: DB2INST1_PASSWORD 
+          value: db2pw123        
+        ports:
+        - containerPort: 50000
+          name: db2
+        imagePullPolicy: IfNotPresent
+        volumeMounts:
+        - mountPath: /database
+          name: sterling-scc-db2-storage
+  volumeClaimTemplates:
+  - metadata:
+      name: sterling-scc-db2-storage
+    spec:
+      accessModes:
+      - ReadWriteOnce
+      resources:
+        requests:
+          storage: 20Gi
+      storageClassName: ibmc-block-gold
+
